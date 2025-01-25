@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+</head>
+<style>
+    
+.loader{
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+
+}
+.loader video{
+    overflow: hidden;
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100vh; /* Height as width */
+    height: 100vw; /* Width as height */
+    transform: translate(-50%, -50%) rotate(-90deg);
+    transform-origin: center;
+    object-fit: cover;
+    transition: opacity 1s ease-in-out;
+}
+
+.start-btn{
+    height: 40px;
+    width: 90px;
+    z-index: 97;
+    color: rgb(27, 26, 26);
+    background-color: rgb(255, 225, 28);
+    position: fixed;
+    top: 70%;
+    left: 44%;
+    font-size: 16px;
+    transform: translate(50%, 50%);
+    padding:1px 5px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+/* .loader h1{
+    font-size: 30px;
+    font-weight: bolder;
+    color: rgb(255, 19, 66);
+    position: fixed;
+    background-color: #ffffff26;
+    top: 10px;
+    left: 30px;
+    text-align: center;
+    padding:1px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    z-index: 101;
+}
+.loader h1:hover{
+    cursor: none;
+} */
+.start-btn:hover{
+    background-color: rgb(233, 184, 22);
+    color: #ffffff;
+    cursor: pointer;
+
+}
+.gradient-border {
+  --borderWidth: 3px;
+  background: #1D1F20;
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+.gradient-border:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+</style>
+<body>
+    <div class="loader">
+        <!-- <h1>BLOOD GROUP DETECTION</h1> -->
+        <video autoplay loop muted playsinline src="../static/loader.mp4"></video>
+        <button type="button" class="start-btn gradient-border">START</button>
+    </div>
+</body>
+<script>
+    document.querySelector(".start-btn").addEventListener("click", function() {
+            document.querySelector(".loader").style.display = 'none';
+            window.location.href = "/homepage";
+        });
+</script>
+</html>

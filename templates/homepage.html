@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/CustomEase.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>BloodCheck-Home</title>
+</head>
+<style>
+:root {
+  --color-light: var(--color-neutral-200);
+  --color-dark: var(--color-neutral-800);
+  --color-primary: #ff4c24;
+  --color-neutral-100: #ffffff;
+  --color-neutral-200: #efeeec;
+  --color-neutral-300: #e3e1de;
+  --color-neutral-400: #cbc8c5;
+  --color-neutral-500: #818180;
+  --color-neutral-600: #2c2c2c;
+  --color-neutral-700: #1f1f1f;
+  --color-neutral-800: #131313;
+  --color-neutral-900: #000000;
+  --color-white: var(--color-neutral-100);
+  --color-black: var(--color-neutral-900);
+  --color-error: var(--color-primary);
+  --color-success: #0ba954; 
+  --cubic-default: cubic-bezier(0.65, 0.05, 0, 1);
+  --duration-default: 0.735s;
+  --animation-default: var(--duration-default) var(--cubic-default);
+  --gap: 2em;
+  --section-padding: calc(3.5em + (var(--gap) * 2));
+  --container-padding: 2em;
+  --header-height: calc(1.5em + (var(--gap) * 2));
+  --footer-height: calc(2.785em + (var(--gap) * 2));
+}
+body {
+  background-color: var(--color-black);
+  color: var(--color-light);
+  font-size: var(--size-font);
+  font-family: arial, sans-serif;
+}
+
+.cloneable {
+  padding: var(--container-padding);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+  font-size: 1.1vw;
+}
+
+.tab-container {
+  grid-column-gap: 3em;
+  grid-row-gap: 3em;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 2.5em;
+  display: flex;
+}
+
+.tab-layout-container {
+  width: 100%;
+  max-width: 36em;
+  height: 100%;
+  margin-left: auto;
+  margin-right: 0;
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
+.tab-container-bottom {
+  grid-column-gap: 2em;
+  grid-row-gap: 2em;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
+.tab-container-top {
+  grid-column-gap: 2em;
+  grid-row-gap: 2em;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
+.tab-layout-col {
+  width: 50%;
+}
+
+.tab-content-wrap {
+  width: 100%;
+  min-width: 24em;
+  position: relative;
+}
+
+.content-button__bg {
+  z-index: -1;
+  background-color: #efeeec;
+  border-radius: .25em;
+  position: absolute;
+  inset: 0%;
+}
+
+.content-p {
+  margin: 0;
+  font-size: 1.25em;
+  line-height: 1.4;
+}
+
+.tab-button__bg {
+  z-index: 0;
+  background-color: #efeeec0f;
+  border: 1px solid #efeeec14;
+  border-radius: .25em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+}
+
+.tab-content-item {
+  z-index: 1;
+  grid-column-gap: 1.25em;
+  grid-row-gap: 1.25em;
+  visibility: hidden;
+  flex-flow: column;
+  display: flex;
+  position: absolute;
+  inset: auto 0% 0%;
+}
+
+.tab-content-item.active {
+  visibility: visible;
+}
+
+.tab-layout {
+  z-index: 1;
+  grid-row-gap: 3em;
+  flex-flow: wrap;
+  width: 100%;
+  min-height: 37em;
+  display: flex;
+  position: relative;
+}
+
+.filter-bar {
+  background-color: #efeeec0f;
+  border: 1px solid #efeeec14;
+  border-radius: .5em;
+  padding: .5em;
+  display: flex;
+}
+
+.filter-button {
+  background-color: #0000;
+  border: 1px solid #efeeec00;
+  padding: 1.125em 1.5em;
+  transition: border-color .2s;
+  position: relative;
+}
+
+.filter-button.active {
+  border-color: #efeeec4d;
+  border-radius: .25em;
+}
+
+.filter-button__p {
+  z-index: 1;
+  font-size: 1.125em;
+  position: relative;
+  color:var(--color-light);
+}
+
+.tab-visual-wrap {
+  border-radius: .5em;
+  width: 100%;
+  height: 42em;
+  max-height: 80vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-visual-item {
+  visibility: hidden;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+}
+
+.tab-visual-item.active {
+  visibility: visible;
+}
+
+.tab-image {
+  object-fit: cover;
+  border-radius: .5em;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+}
+
+.tab-content__heading {
+  letter-spacing: -.02em;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.75em;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.tab-layout-heading {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 4em;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.tab-content__button {
+  color: #131313;
+  justify-content: center;
+  align-items: center;
+  height: 4em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  text-decoration: none;
+  display: flex;
+  position: relative;
+}
+
+
+.our-team {
+  padding: 30px 0 40px;
+  margin-bottom: 30px;
+  background-color: #f7f5ec;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.our-team .picture {
+  display: inline-block;
+  height: 130px;
+  width: 130px;
+  margin-bottom: 50px;
+  z-index: 1;
+  position: relative;
+}
+
+.our-team .picture::before {
+  content: "";
+  width: 100%;
+  height: 0;
+  border-radius: 50%;
+  background-color: #1369ce;
+  position: absolute;
+  bottom: 135%;
+  right: 0;
+  left: 0;
+  opacity: 0.9;
+  transform: scale(3);
+  transition: all 0.3s linear 0s;
+}
+
+.our-team:hover .picture::before {
+  height: 100%;
+}
+
+.our-team .picture::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #1369ce;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.our-team .picture img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  transform: scale(1);
+  transition: all 0.9s ease 0s;
+}
+
+.our-team:hover .picture img {
+  box-shadow: 0 0 0 14px #f7f5ec;
+  transform: scale(0.7);
+}
+
+.our-team .title {
+  display: block;
+  font-size: 15px;
+  color: #4e5052;
+  text-transform: capitalize;
+}
+.team-content .name{
+    color: black;
+}
+
+.read-more {
+    text-align: justify;
+  margin-bottom: 1.5em;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  &__link-wrap {
+    display: block;
+  }
+
+  &__link {
+    font-weight: 700;
+  }
+}
+
+
+.read-more.is-inline,
+.read-more.is-inline p,
+.read-more.is-inline + span  {
+  display: inline;
+}
+
+.read-more.is-inline + span {
+  margin-left: 0.25em
+}
+
+.read-more.is-inline.is-expanded + span {
+  display: inline-block;
+  margin-left: 0;
+}
+
+article {
+  padding: 1em 0;
+  max-width: 37em;
+  margin: 2em auto;
+  line-height: 1.4;
+  
+  & + & {
+    border-top: 1px solid #ddd;
+  }
+}
+.gradient-border {
+  --borderWidth: 3px;
+  background: #1D1F20;
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+
+.gradient-border:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+</style>
+<body>
+    <section class="cloneable">
+        <div data-tabs="wrapper" class="tab-layout">
+          <div class="tab-layout-col">
+            <div class="tab-layout-container">
+              <div class="tab-container">
+                <div class="tab-container-top">
+                  <h1 class="tab-layout-heading" style="color: red;">BloodCheck</h1>
+                  <div data-flip-button="wrap" data-tabs="nav" class="filter-bar"><button data-tabs="button" data-flip-button="button" class="filter-button active">
+                      <div class="filter-button__p">Home</div>
+                      <div data-flip-button="bg" class="tab-button__bg"></div>
+                    </button><button data-tabs="button" data-flip-button="button" class="filter-button">
+                      <div class="filter-button__p">About</div>
+                    </button><button data-tabs="button" data-flip-button="button" class="filter-button">
+                      <div class="filter-button__p">Team</div>
+                    </button></div>
+                </div>
+                <div class="tab-container-bottom">
+                  <div data-tabs="content-wrap" class="tab-content-wrap">
+                    <div data-tabs="content-item" class="tab-content-item active">
+                      <h2 data-tabs-fade="" class="tab-content__heading">Welcome to BloodCheck</h2>
+                      <p data-tabs-fade="" class="content-p opacity--80">Your Reliable Blood Group Detection Platform</p>
+                    </div>
+                    <div data-tabs="content-item" class="tab-content-item">
+                      <h2 data-tabs-fade="" class="tab-content__heading">About BloodCheck</h2>
+                      <p data-tabs-fade="" class="content-p opacity--80">We aim to make blood group detection accessible to everyone, ensuring awareness and preparedness for health-related needs.</p>
+                    </div>
+                    <div data-tabs="content-item" class="tab-content-item">
+                      <h2 data-tabs-fade="" class="tab-content__heading">Meet the BloodCheck Team</h2>
+                      <p data-tabs-fade="" class="content-p opacity--80">At BloodCheck, we are a passionate team of innovators, healthcare experts, and technology enthusiasts dedicated to making blood group detection simple, fast, and accessible for everyone.</p>
+                    </div>
+                  </div>
+                  <a id="form-button" href="/test" class="tab-content__button w-inline-block">
+                    <p class="content-p" style="text-decoration: none;">Try Yourself</p>
+                    <div class="content-button__bg"></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-layout-col gradient-border" style="padding: 20px 20px;">
+            <div data-tabs="visual-wrap" class="tab-visual-wrap">
+              <div data-tabs="visual-item" class="tab-visual-item active">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXnK_vNORIkynKYV6p4vNBSTY6_qPGA0ZCg&s" alt="" style=" height: 100%; width: 100%; position: fixed; transform-origin: center; object-fit: cover;">                
+              </div>
+              <div data-tabs="visual-item" class="tab-visual-item">
+                <article>
+                    <h3>About</h3>
+                    <div class="read-more js-read-more" data-rm-words="30">
+                        <p>Fingerprints are unique to each individual, formed by ridges and valleys on the skin's surface. Even identical twins have distinct fingerprints. This uniqueness arises from both genetic and environmental factors during fetal development, making fingerprints a reliable biometric identifier. The patterns, such as loops, whorls, and arches, are analyzed in forensic science and identity verification due to their stability and individuality.</p>
+                        <p>The correlation between fingerprints and blood groups lies in the genetic underpinnings that influence both characteristics. Blood group antigens, such as A, B, AB, and O, are determined by specific alleles inherited from parents. These genetic markers are also linked to other physical traits, potentially influencing fingerprint patterns. Studies have explored these connections to develop algorithms that predict blood groups from fingerprint, leveraging the consistency and accessibility of fingerprint data in forensic and medical contexts.</p>
+                        <p>Predicting blood groups from fingerprints holds significant practical value. In forensic investigations, identifying the blood group of an unknown individual from crime scene evidence can provide crucial leads. Medical emergencies where a patient's blood type is urgently needed but unknown could benefit from quick identification through fingerprint analysis. This approach could streamline processes in healthcare settings and improve patient care by ensuring timely and accurate blood transfusions. Overall, integrating fingerprint analysis with blood group prediction enhances efficiency in various fields, emphasizing the interdisciplinary application of biometric data in real-world scenarios.</p>
+                    </div>
+                </article>
+              </div>
+              <div data-tabs="visual-item" class="tab-visual-item" style="display: flex; flex-direction: column;">
+                <div class="row">
+                    <div>
+                      <div class="our-team">
+                        <div class="picture">
+                          <img class="img-fluid" src="../static/images/nabina.png">
+                        </div>
+                        <div class="team-content">
+                          <h3 class="name">Nabina Mallik</h3>
+                          <h4 class="title">2101214106</h4>
+                        </div>
+                      </div>
+                    </div>
+                        <div class="col-4">
+                      <div class="our-team">
+                        <div class="picture">
+                          <img class="img-fluid" src="../static/images/hapi.jpg">
+                        </div>
+                        <div class="team-content">
+                          <h4 class="name">Debashis Das</h3>
+                          <h5 class="title">2101214082</h4>
+                        </div>
+                        
+                      </div>
+                    </div>
+                        <div class="col-4">
+                      <div class="our-team">
+                        <div class="picture">
+                          <img class="img-fluid" src="../static/images/basanta.jpg">
+                        </div>
+                        <div class="team-content">
+                          <h4 class="name">Basanta Ku Behera</h3>
+                          <h5 class="title">2101214075</h4>
+                        </div>
+                        
+                      </div>
+                    </div>
+                        <div class="col-4">
+                      <div class="our-team">
+                        <div class="picture">
+                          <img class="img-fluid" src="../static/images/ashis.jpg">
+                        </div>
+                        <div class="team-content">
+                          <h4 class="name">Ayashkant Mallik</h3>
+                          <h5 class="title">2101214073</h4>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</body>
+<script>
+gsap.registerPlugin(CustomEase, Flip )
+
+CustomEase.create("osmo-ease", "0.625, 0.05, 0, 1")
+
+gsap.defaults({
+  ease: "osmo-ease",
+  duration: 0.8,
+});
+
+function initFlipButtons() {
+  let wrappers = document.querySelectorAll('[data-flip-button="wrap"]');
+  
+  wrappers.forEach((wrapper) => {
+    let buttons = wrapper.querySelectorAll('[data-flip-button="button"]');
+    let bg = wrapper.querySelector('[data-flip-button="bg"]');
+    
+    buttons.forEach(function (button) {
+      button.addEventListener("mouseenter", function () {
+        const state = Flip.getState(bg);
+        this.appendChild(bg);
+        Flip.from(state, {
+          duration: 0.4,
+        });
+      });
+
+      button.addEventListener("focus", function () {
+        const state = Flip.getState(bg);
+        this.appendChild(bg);
+        Flip.from(state, {
+          duration: 0.4,
+        });
+      });
+
+      button.addEventListener("mouseleave", function () {
+        const state = Flip.getState(bg);
+        const activeLink = wrapper.querySelector(".active");
+        activeLink.appendChild(bg);
+        Flip.from(state, {
+          duration: 0.4,
+        });
+      });
+
+
+      button.addEventListener("blur", function () {
+        const state = Flip.getState(bg);
+        const activeLink = wrapper.querySelector(".active");
+        activeLink.appendChild(bg);
+        Flip.from(state, {
+          duration: 0.4,
+        });
+      });
+    });
+  });
+}
+
+function initTabSystem(){
+  let wrappers = document.querySelectorAll('[data-tabs="wrapper"]')
+  
+  wrappers.forEach((wrapper) => {
+    let nav = wrapper.querySelector('[data-tabs="nav"]')
+    let buttons = nav.querySelectorAll('[data-tabs="button"]')
+    let contentWrap = wrapper.querySelector('[data-tabs="content-wrap"]')
+    let contentItems = contentWrap.querySelectorAll('[data-tabs="content-item"]')
+    let visualWrap = wrapper.querySelector('[data-tabs="visual-wrap"]')
+    let visualItems = visualWrap.querySelectorAll('[data-tabs="visual-item"]')
+
+    let activeButton = buttons[0];
+    let activeContent = contentItems[0];
+    let activeVisual = visualItems[0];
+    let isAnimating = false;
+
+    function switchTab(index, initial = false) {
+      if (!initial && (isAnimating || buttons[index] === activeButton)) return; // ignore click if the clicked button is already active 
+      isAnimating = true;
+
+      const outgoingContent = activeContent;
+      const incomingContent = contentItems[index];
+      const outgoingVisual = activeVisual;
+      const incomingVisual = visualItems[index];
+
+      let outgoingLines = outgoingContent.querySelectorAll("[data-tabs-fade]") || [];
+      let incomingLines = incomingContent.querySelectorAll("[data-tabs-fade]");
+
+      const timeline = gsap.timeline({
+        defaults:{
+          ease:"power3.inOut"
+        },
+        onComplete: () => {
+          if(!initial){
+            outgoingContent && outgoingContent.classList.remove("active");
+            outgoingVisual && outgoingVisual.classList.remove("active");            
+          }
+          activeContent = incomingContent;
+          activeVisual = incomingVisual;
+          isAnimating = false;
+        },
+      });
+
+      incomingContent.classList.add("active");
+      incomingVisual.classList.add("active");
+
+      timeline
+        .to(outgoingLines, { y: "-2em", autoAlpha:0 }, 0)
+        .to(outgoingVisual, { autoAlpha: 0, xPercent: 3 }, 0)
+        .fromTo(incomingLines, { y: "2em", autoAlpha:0 }, { y: "0em", autoAlpha:1, stagger: 0.075 }, 0.4)
+        .fromTo(incomingVisual, { autoAlpha: 0, xPercent: 3 }, { autoAlpha: 1, xPercent: 0 }, "<");
+
+      activeButton && activeButton.classList.remove("active");
+      buttons[index].classList.add("active");
+      activeButton = buttons[index];
+    }
+
+    switchTab(0, true);
+ 
+    buttons.forEach((button, i) => {
+      button.addEventListener("click", () => switchTab(i)); 
+    });
+
+    contentItems[0].classList.add("active");
+    visualItems[0].classList.add("active");
+    buttons[0].classList.add("active");    
+    
+  })
+  
+}
+
+document.addEventListener("DOMContentLoaded", () =>{
+  initTabSystem()
+  initFlipButtons()
+})
+
+
+const ReadMore = (() => {
+   let s;
+
+   return {
+
+     settings() {
+       return {
+         content: document.querySelectorAll('.js-read-more'),
+         originalContentArr: [],
+         truncatedContentArr: [],
+         moreLink: "Read More",
+         lessLink: "Less Link",
+       }
+     },
+
+     init() {
+       s = this.settings();
+       this.bindEvents();
+     },
+
+     bindEvents() {
+       ReadMore.truncateText();
+     },
+
+     /**
+      * Count Words
+      * Helper to handle word count.
+      * @param {string} str - Target content string.
+      */
+     countWords(str) {
+       return str.split(/\s+/).length;
+     },
+
+     /**
+      * Ellpise Content
+      * @param {string} str - content string.
+      * @param {number} wordsNum - Number of words to show before truncation.
+      */
+     ellipseContent(str, wordsNum) {
+       return str.split(/\s+/).slice(0, wordsNum).join(' ') + '...';
+     },
+
+     truncateText() {
+
+       for (let i = 0; i < s.content.length; i++) {
+         const originalContent = s.content[i].innerHTML;
+         const numberOfWords = s.content[i].dataset.rmWords;
+         const truncateContent = ReadMore.ellipseContent(originalContent, numberOfWords);
+         const originalContentWords = ReadMore.countWords(originalContent);
+
+         s.originalContentArr.push(originalContent);
+         s.truncatedContentArr.push(truncateContent);
+
+         if (numberOfWords < originalContentWords) {
+           s.content[i].innerHTML = s.truncatedContentArr[i];
+           let self = i;
+           ReadMore.createLink(self)
+         }
+       }
+       ReadMore.handleClick(s.content);
+     },
+
+     /**
+      * Create Link
+      * Creates and Inserts Read More Link
+      * @param {number} index - index reference of looped item
+      */
+     createLink(index) {
+       const linkWrap = document.createElement('span');
+
+       linkWrap.className = 'read-more__link-wrap';
+
+       linkWrap.innerHTML = `<a id="read-more_${index}"
+                                class="read-more__link"
+                                style="cursor:pointer;">
+                                ${s.moreLink}
+                            </a>`;
+
+       // Inset created link
+       s.content[index].parentNode.insertBefore(linkWrap, s.content[index].nextSibling);
+
+     },
+
+     /**
+      * Handle Click
+      * Toggle Click eve
+      */
+     handleClick(el) {
+       const readMoreLink = document.querySelectorAll('.read-more__link');
+
+       for (let j = 0, l = readMoreLink.length; j < l; j++) {
+
+         readMoreLink[j].addEventListener('click', function() {
+
+           const moreLinkID = this.getAttribute('id');
+           let index = moreLinkID.split('_')[1];
+
+           el[index].classList.toggle('is-expanded');
+
+           if (this.dataset.clicked !== 'true') {
+              el[index].innerHTML = s.originalContentArr[index];
+              this.innerHTML = s.lessLink;
+              this.dataset.clicked = true;
+           } else {
+             el[index].innerHTML = s.truncatedContentArr[index];
+             this.innerHTML = s.moreLink;
+             this.dataset.clicked = false;
+           }
+         });
+       }
+     },
+
+     /**
+      * Open All
+      * Method to expand all instances on the page.
+      * Will probably be useful with a destroy method.
+      */
+     openAll() {
+       const instances = document.querySelectorAll('.read-more__link');
+         for (let i = 0; i < instances.length; i++) {
+           content[i].innerHTML = s.truncatedContentArr[i];
+           instances[i].innerHTML = s.moreLink;
+         }
+       }
+     }
+ })();
+
+
+//export default ReadMore;
+
+ReadMore.init();
+</script>
+</html>

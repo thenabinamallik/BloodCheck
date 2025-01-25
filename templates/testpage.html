@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodCheck-Test</title>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Raleway:200');
+
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #1D1F20;
+}
+#box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50vw;
+  height: 50vh;
+  color: white;
+  font-family: 'Raleway';
+  font-size: 2.5rem;
+}
+#box{
+    display: flex;
+    align-items: center;
+    padding: 0px 10%;
+}
+#box form{
+    height: 250px;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#box h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+#box label {
+    font-size: 28px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+}
+#box input[type="file"] {
+    width: 100%;
+    margin-bottom: 20px;
+}
+#imagePreview {
+    display: none;
+    width: 100px;
+    height: 110px;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+}
+#BeforeimagePreview{
+    display: block;
+    width: 100px;
+    height: 110px;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    text-align: center;
+    font-size: 20px;
+}
+#box button {
+    width: 100%;
+    padding: 10px;
+    background-color: #07b39b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+#box button:hover {
+    transition: 100ms ease-in-out;
+    color: black;
+    background-color:  #6fba82;
+}
+.gradient-border {
+  --borderWidth: 3px;
+  background: #1D1F20;
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+.gradient-border:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+</style>
+<body>
+    <div class="gradient-border" id="box">
+        <h2>Predict Blood Group</h2>
+        <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+            <label for="imageUpload">Choose Image:</label>
+            <input type="file" name="file" accept="image/*" onchange="displayImage(this)" >
+            <img id="imagePreview" src="" alt="Image Preview">
+            <div id="BeforeimagePreview">No image to show</div>
+            <button type="submit" id="submit" >Predict Blood Group</button>
+        </form>
+    </div>
+</body>
+<script>
+    
+function displayImage(input) {
+    const imagePreview = document.getElementById('imagePreview');
+    const BeforeimagePreview = document.getElementById('BeforeimagePreview');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+            BeforeimagePreview.style.display = 'none';
+        }
+        reader.readAsDataURL(input.files[0]);
+        inp = true;
+    } else {
+        imagePreview.style.display = 'none';
+    }
+}
+function predictBloodGroup() {
+    const imageUpload = document.getElementById('imageUpload').files[0];
+    if (imageUpload) {
+        alert('Please choose an image before predicting.');
+    }
+}
+
+</script>
+</html>
